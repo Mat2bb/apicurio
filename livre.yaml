@@ -1,0 +1,80 @@
+---
+swagger: "2.0"
+info:
+  title: My firs API
+  version: 1.0.0
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+paths:
+  /livres:
+    get:
+      responses:
+        "200":
+          description: liste recupérée
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/livre'
+          examples: {}
+      summary: Liste les livres
+  /livres/{livreId}:
+    get:
+      responses:
+        "200":
+          description: Successful response - returns a single `livre`.
+          schema:
+            $ref: '#/definitions/livre'
+      operationId: getlivre
+      summary: Get a livre
+      description: Gets the details of a single instance of a `livre`.
+    put:
+      parameters:
+      - name: body
+        description: Updated `livre` information.
+        schema:
+          $ref: '#/definitions/livre'
+        in: body
+        required: true
+      responses:
+        "202":
+          description: Successful response.
+      operationId: updatelivre
+      summary: Update a livre
+      description: Updates an existing `livre`.
+    delete:
+      responses:
+        "204":
+          description: Successful response.
+      operationId: deletelivre
+      summary: Delete a livre
+      description: Deletes an existing `livre`.
+    parameters:
+    - name: livreId
+      description: A unique identifier for a `livre`.
+      in: path
+      required: true
+      type: string
+definitions:
+  livre:
+    title: Root Type for livre
+    description: descriotion d'un livre
+    type: object
+    properties:
+      id:
+        type: string
+      titre:
+        type: string
+      nbpages:
+        format: int32
+        type: integer
+      auteur:
+        type: string
+      edition:
+        type: string
+    example:
+      id: "123"
+      titre: toto
+      nbpages: 123
+      auteur: Jack London
+      edition: Plomb
