@@ -16,18 +16,20 @@ paths:
     summary: RESTful Api permettant l'accès au référentiel Finance
     description: ""
     get:
-      tags:
-      - dynamique
-      - finance
+      tags: []
       responses:
         "200":
           $ref: '#/components/responses/Engagement'
+        "500":
+          $ref: '#/components/responses/ErreurOracle'
+        "403":
+          $ref: '#/components/responses/ErreurOracleConnexion'
       summary: Récupération de l'objet issu du référentiel finance
-      description: "Endpoint dynamique s'appuyant sur un fichier .sql (côté serveur)\
-        \ et sur un ensemble de paramètres utilisés dans la requête sql.\r\nPermet\
-        \ de récupérer n'importe quelle donnée du Référentiel Finance. \r\nIl est\
-        \ possible d'utiliser autant de paramètres que l'on souhaite pour paramétrer\
-        \ la requête sql."
+      description: "Endpoint dynamique s'appuyant sur un fichier .sql (déposé côté\
+        \ serveur) et sur un ensemble de paramètres utilisés dans la requête sql.\r\
+        \nPermet de récupérer n'importe quelle donnée du Référentiel Finance. \r\n\
+        Il est possible d'utiliser autant de paramètres que l'on souhaite pour paramé\
+        trer la requête sql."
     parameters:
     - examples:
         ObjetEntreprise:
@@ -140,6 +142,40 @@ components:
           NUMERO: "82801536"
           LIBELLE: Gaz P1 bâtiments métropolitains/ FLah/ SD
           NUMERO_INTERNE: 2020-9191
+    ErreurOracle:
+      title: Root Type for ErreurOracle
+      description: ""
+      type: object
+      properties:
+        Engagement:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+      example:
+        Engagement:
+          code: "98"
+          message: |
+            Requete Oracle :ORA-00936: expression absente
+    ErreurOracleConnexion:
+      title: Root Type for ErreurOracle
+      description: ""
+      type: object
+      properties:
+        Engagement:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+      example:
+        Engagement:
+          code: "99"
+          message: |
+            Oracle Connection :ORA-01017: nom utilisateur/mot de passe non valide ; connexion refusée
   responses:
     Engagement:
       content:
@@ -157,3 +193,15 @@ components:
           schema:
             $ref: '#/components/schemas/Factures'
       description: 'Liste d''Objet Facture '
+    ErreurOracle:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErreurOracle'
+      description: 'Retour (code 98) lorque la requête sql génère une erreur Oracle. '
+    ErreurOracleConnexion:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErreurOracleConnexion'
+      description: 'Retour (code 99) lorque la connexion à la base Oracle est impossible. '
