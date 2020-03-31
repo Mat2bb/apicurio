@@ -1,0 +1,95 @@
+---
+openapi: 3.0.2
+info:
+  title: API Talend ESB
+  version: 1.0.0
+  description: API développée avec l'ESB Talend
+servers:
+- url: http://{serveur}:8040/services
+  description: Accès à l'ensemble des services (REST et SOAP) de la plateforme ESB
+  variables:
+    serveur:
+      default: 127.0.0.1
+      description: Serveur hébergeant le Runtime ESB
+paths:
+  /referentielFinance: {}
+components:
+  schemas:
+    Facture:
+      title: Root Type for Facture
+      description: Objet Facture simplifié issu de GDA
+      type: object
+      properties:
+        Facture:
+          type: array
+          items:
+            type: object
+            properties:
+              ORIGINE:
+                type: string
+              CDR:
+                type: string
+              TIERS:
+                type: string
+              NUMERO:
+                type: string
+              LIBELLE:
+                type: string
+              NUMERO_INTERNE:
+                type: string
+      example:
+        Facture:
+        - ORIGINE: MET
+          CDR: "5512"
+          TIERS: "134"
+          NUMERO: "82801536"
+          LIBELLE: Gaz P1 bâtiments métropolitains/ FLah/ SD
+          NUMERO_INTERNE: 2020-9191
+    Engagement:
+      title: Root Type for Engagement
+      description: Objet Engagement simplifié issu de GDA
+      type: object
+      properties:
+        CDR:
+          type: string
+        TIERS:
+          type: string
+        ORIGINE:
+          type: string
+        REFRAP:
+          type: string
+        AVEC_COMMANDE:
+          type: string
+        ENGJ_CODE:
+          type: string
+        NUMERO_INTERNE:
+          type: string
+      example:
+        CDR: "5512"
+        TIERS: "134"
+        ORIGINE: MET
+        REFRAP: E337992
+        AVEC_COMMANDE: NON
+        ENGJ_CODE: "337992"
+        NUMERO_INTERNE: 2020-001453-0000
+    Engagements:
+      description: Liste d'Engagement
+      type: array
+      items:
+        $ref: '#/components/schemas/Engagement'
+      example:
+        Engagement:
+        - CDR: "5512"
+          TIERS: "134"
+          ORIGINE: MET
+          REFRAP: E337992
+          AVEC_COMMANDE: NON
+          ENGJ_CODE: "337992"
+          NUMERO_INTERNE: 2020-001453-0000
+  responses:
+    Engagement:
+      description: "{\r\n    \"Engagement\": [\r\n        {\r\n            \"CDR\"\
+        : \"5512\",\r\n            \"TIERS\": \"134\",\r\n            \"ORIGINE\"\
+        : \"MET\",\r\n            \"REFRAP\": \"E337992\",\r\n            \"AVEC_COMMANDE\"\
+        : \"NON\",\r\n            \"ENGJ_CODE\": \"337992\",\r\n            \"NUMERO_INTERNE\"\
+        : \"2020-001453-0000\"\r\n        }\r\n    ]\r\n}"
