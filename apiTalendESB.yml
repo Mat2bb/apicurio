@@ -12,7 +12,48 @@ servers:
       default: 127.0.0.1
       description: Serveur hébergeant le Runtime ESB
 paths:
-  /referentielFinance: {}
+  /referentielFinance:
+    summary: RESTful Api permettant l'accès au référentiel Finance
+    description: ""
+    get:
+      tags:
+      - dynamique
+      - finance
+      responses:
+        "200":
+          $ref: '#/components/responses/Engagement'
+      summary: Récupération de l'objet issu du référentiel finance
+      description: "Endpoint dynamique s'appuyant sur un fichier .sql (côté serveur)\
+        \ et sur un ensemble de paramètres utilisés dans la requête sql.\r\nPermet\
+        \ de récupérer n'importe quelle donnée du Référentiel Finance. \r\nIl est\
+        \ possible d'utiliser autant de paramètres que l'on souhaite pour paramétrer\
+        \ la requête sql."
+    parameters:
+    - examples:
+        ObjetEntreprise:
+          value: Entreprise
+      name: objet
+      description: |-
+        Nom de l'objet à récupérer du référentiel finance.
+        Ce nom doit correpondre au nom du fichier .sql sur lequel s'appuie le service.
+      schema:
+        type: string
+      in: query
+      required: true
+    - name: param1
+      description: "Paramètre dont la valeur sera utilisée dans la requête sql en\
+        \ remplacement du mot clé #nomDuParam1#.\n\nExemple: Si le param1 est nommé\
+        \ 'origine', le mot clé '#origine#' sera remplacé par la valeur du paramè\
+        tre 'origine'. "
+      schema:
+        type: string
+      in: query
+      required: false
+    - name: param2
+      description: Idem param1
+      schema:
+        type: string
+      in: query
 components:
   schemas:
     Facture:
@@ -86,10 +127,33 @@ components:
           AVEC_COMMANDE: NON
           ENGJ_CODE: "337992"
           NUMERO_INTERNE: 2020-001453-0000
+    Factures:
+      description: Liste de Factures
+      type: array
+      items:
+        $ref: '#/components/schemas/Facture'
+      example:
+        Facture:
+        - ORIGINE: MET
+          CDR: "5512"
+          TIERS: "134"
+          NUMERO: "82801536"
+          LIBELLE: Gaz P1 bâtiments métropolitains/ FLah/ SD
+          NUMERO_INTERNE: 2020-9191
   responses:
     Engagement:
-      description: "{\r\n    \"Engagement\": [\r\n        {\r\n            \"CDR\"\
-        : \"5512\",\r\n            \"TIERS\": \"134\",\r\n            \"ORIGINE\"\
-        : \"MET\",\r\n            \"REFRAP\": \"E337992\",\r\n            \"AVEC_COMMANDE\"\
-        : \"NON\",\r\n            \"ENGJ_CODE\": \"337992\",\r\n            \"NUMERO_INTERNE\"\
-        : \"2020-001453-0000\"\r\n        }\r\n    ]\r\n}"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Engagements'
+      description: |-
+        La réponse du service dynamique varie selon le sql associé :
+        Il retourne une liste d'Objets correspondant chacun à une occurence du résultat de la requête sql
+
+        Par exemple la liste des Engagements
+    Facture:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Factures'
+      description: 'Liste d''Objet Facture '
