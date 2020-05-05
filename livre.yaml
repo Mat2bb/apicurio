@@ -25,6 +25,7 @@ paths:
           description: Successful response - returns a single `livre`.
           schema:
             $ref: '#/definitions/livre'
+          examples: {}
       operationId: getlivre
       summary: Get a livre
       description: Gets the details of a single instance of a `livre`.
@@ -78,3 +79,33 @@ definitions:
       nbpages: 123
       auteur: Jack London
       edition: Plomb
+responses:
+  livreResponse:
+    description: Reponse livre
+    schema:
+      $ref: '#/definitions/livre'
+    examples:
+      application/json:
+        id: "123"
+        titre: toto
+        nbpages: 123
+        auteur: Jack London
+        edition: Plomb
+  livresResponse:
+    description: Liste de livres
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/livre'
+    examples:
+      application/json:
+      - id: some text
+        titre: some text
+        nbpages: 96
+        auteur: some text
+        edition: some text
+      - id: "123"
+        titre: toto
+        nbpages: 123
+        auteur: Jack London
+        edition: Plomb
